@@ -32,9 +32,9 @@
       </div>
       <div class="catalog-layout">
           <div class="catalog-filters">
-
             <category-filter  [categoryWithTypes]="categoryWithTypes"  *ngFor="let categoryWithTypes of categoriesWithTypes"></category-filter>
-
+            <category-filter type="height"></category-filter>
+            <category-filter type="diameter"></category-filter>
           </div>
           <div class="catalog-products">
               <product-card [product]="product"  *ngFor="let product of products"></product-card>
