@@ -5,5 +5,5 @@ export type ActiveParamsType = {
     diameterFrom?: string, 
     diameterTo?: string, 
     sort?: string, 
-    page?: string
+    page?: number | string
 }
