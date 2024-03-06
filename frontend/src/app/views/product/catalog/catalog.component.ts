@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CategoryService } from 'src/app/shared/services/category.service';
 import { ProductService } from 'src/app/shared/services/product.service';
+import { ActiveParamsUtil } from 'src/app/shared/utils/active-params.util';
+import { ActiveParamsType } from 'src/types/active-params.type';
 import { CategoryWithTypeType } from 'src/types/category-with-type.type';
 import { ProductType } from 'src/types/product.type';
 
@@ -12,12 +15,21 @@ import { ProductType } from 'src/types/product.type';
 export class CatalogComponent implements OnInit {
 
   products: ProductType[] = [];
+  activeParams:ActiveParamsType = {types: []}; 
 
   categoriesWithTypes: CategoryWithTypeType[] = [];
+  typesElement: string[] = [];  
 
-  constructor(private productService: ProductService , private categorySerice : CategoryService) { }
+  constructor(private productService: ProductService , private categorySerice : CategoryService,  
+    private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
+
+   this.activatedRoute.queryParams.subscribe(params=> {  
+      this.activeParams = ActiveParamsUtil.processParams(params);
+      console.log(this.activeParams)
+   })
+
      this.productService.getProducts()
        .subscribe( data=> {
           this.products = data.items ;
@@ -27,6 +39,10 @@ export class CatalogComponent implements OnInit {
          .subscribe( data=> {
             console.log(data);
             this.categoriesWithTypes = data ;
-         })
+         });
+
+      
       }
+
+    
 }

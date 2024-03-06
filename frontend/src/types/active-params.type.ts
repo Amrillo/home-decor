@@ -1,5 +1,5 @@
 export type ActiveParamsType = {  
-    types: string[], 
+    types: string[] | null, 
     heightFrom?: string, 
     heightTo?: string, 
     diameterFrom?: string, 
