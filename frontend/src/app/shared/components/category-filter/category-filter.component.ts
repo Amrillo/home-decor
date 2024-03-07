@@ -58,7 +58,7 @@ export class CategoryFilterComponent implements OnInit {
         this.activeParamas.types = params['types'];
       
         if(this.categoryWithTypes && this.categoryWithTypes.types && this.categoryWithTypes.types.length > 0 &&  
-          this.categoryWithTypes.types.some(type=>this.activeParamas.types.find(item=> type.url === item)) && this.activeParamas.types.length > 0) {  
+          this.categoryWithTypes.types.some(type=>this.activeParamas.types?.find(item=> type.url === item))) {  
            this.open = true ; 
         }
       }

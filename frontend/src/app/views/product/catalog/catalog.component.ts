@@ -18,7 +18,7 @@ export class CatalogComponent implements OnInit {
   activeParams:ActiveParamsType = {types: []}; 
 
   categoriesWithTypes: CategoryWithTypeType[] = [];
-  typesElement: string[] = [];  
+  
 
   constructor(private productService: ProductService , private categorySerice : CategoryService,  
     private activatedRoute: ActivatedRoute) { }
@@ -27,7 +27,7 @@ export class CatalogComponent implements OnInit {
 
    this.activatedRoute.queryParams.subscribe(params=> {  
       this.activeParams = ActiveParamsUtil.processParams(params);
-      console.log(this.activeParams)
+      
    })
 
      this.productService.getProducts()
