@@ -45,9 +45,10 @@
             }
          }
          .catalog-sorting {
-            width: 257px;
+            width: 190px;
             position: relative;
-
+            cursor: pointer;
+            min-width: 190px;
 
           .catalog-sorting-head {
             display: flex;
@@ -84,6 +85,8 @@
               }
             }
             &.open {
+              width: 257px;
+              min-width: 257px;
               .catalog-sorting-head {
                   color: #000;
                   background-color: #EBEBEB;
