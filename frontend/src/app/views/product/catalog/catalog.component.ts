@@ -28,6 +28,7 @@ export class CatalogComponent implements OnInit {
       {name: 'По убыванию цены', value: 'price-desc'}
     ]
   pages: number[] = [];
+  showMessage:boolean = false;
 
   constructor(private productService: ProductService , private categorySerice : CategoryService,
     private activatedRoute: ActivatedRoute, private router: Router) { }
@@ -70,24 +71,27 @@ export class CatalogComponent implements OnInit {
           }
           if(this.activeParams.diameterFrom) {
             this.appliedFilters.push({
-              name: 'Высота: от ' + this.activeParams.diameterFrom + ' cm',
+              name: 'Диаметр: от ' + this.activeParams.diameterFrom + ' cm',
               urlParam: 'diameterFrom'
             })
           }
           if(this.activeParams.diameterTo) {
             this.appliedFilters.push({
-              name: 'Высота: до ' + this.activeParams.diameterTo + ' cm',
+              name: 'Диаметр: до ' + this.activeParams.diameterTo + ' cm',
               urlParam: 'diameterTo'
             })
           }
-          console.log(this.activeParams); 
+          console.log(this.activeParams);
           this.productService.getProducts(this.activeParams)
           .subscribe( data=> {
             this.pages=[];
+            this.showMessage = false;
             for(let i = 1 ; i <= data.pages ; i++) {
               this.pages.push(i);
             }
-  
+            if(data.pages === 0) {
+              this.showMessage = true;
+            }
             this.products = data.items;
           });
        })
@@ -95,6 +99,7 @@ export class CatalogComponent implements OnInit {
   }
 
     removeAplliedFilter(appliedFilter: AppliedFilterType) {
+      console.log(appliedFilter)
         if(appliedFilter.urlParam === 'heightFrom' || appliedFilter.urlParam === 'heightTo' ||
               appliedFilter.urlParam === 'diameterFrom' || appliedFilter.urlParam === 'diameterTo'
         ) {
@@ -103,11 +108,11 @@ export class CatalogComponent implements OnInit {
           if(this.activeParams.types) {
               this.activeParams.types = this.activeParams.types.filter(item => item !== appliedFilter.urlParam);
           }
-          this.activeParams.page = 1 ; 
-          this.router.navigate(['/catalog'], {
-              queryParams: this.activeParams
-          })
         }
+        this.activeParams.page = 1 ;
+        this.router.navigate(['/catalog'], {
+            queryParams: this.activeParams
+        })
     }
 
 
