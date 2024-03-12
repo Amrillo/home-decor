@@ -80,21 +80,19 @@ export class CatalogComponent implements OnInit {
               urlParam: 'diameterTo'
             })
           }
+          console.log(this.activeParams); 
+          this.productService.getProducts(this.activeParams)
+          .subscribe( data=> {
+            this.pages=[];
+            for(let i = 1 ; i <= data.pages ; i++) {
+              this.pages.push(i);
+            }
+  
+            this.products = data.items;
+          });
        })
     });
-
-
-    this.productService.getProducts()
-        .subscribe( data=> {
-          this.pages=[];
-          for(let i = 1 ; i <= data.pages ; i++) {
-            this.pages.push(i);
-          }
-
-          this.products = data.items ;
-
-        });
-     }
+  }
 
     removeAplliedFilter(appliedFilter: AppliedFilterType) {
         if(appliedFilter.urlParam === 'heightFrom' || appliedFilter.urlParam === 'heightTo' ||
@@ -105,7 +103,7 @@ export class CatalogComponent implements OnInit {
           if(this.activeParams.types) {
               this.activeParams.types = this.activeParams.types.filter(item => item !== appliedFilter.urlParam);
           }
-
+          this.activeParams.page = 1 ; 
           this.router.navigate(['/catalog'], {
               queryParams: this.activeParams
           })
@@ -128,11 +126,9 @@ export class CatalogComponent implements OnInit {
     openPage(page:number) {
 
        this.activeParams.page = page;
-
        this.router.navigate(['/catalog'], {
         queryParams: this.activeParams
-     })
-
+      })
     }
 
     openNextPage() {

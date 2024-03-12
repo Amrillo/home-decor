@@ -83,10 +83,10 @@ export class CategoryFilterComponent implements OnInit {
     } else if (checked) {
        this.activeParamas.types = [url];
     }
-
-    this.router.navigate(['/catalog'], {
-       queryParams: this.activeParamas
-    })
+      this.activeParamas.page = 1;
+      this.router.navigate(['/catalog'], {
+        queryParams: this.activeParamas
+      })
   }
 
   updateFilterParamFromTo(param: string,value: string ) {
@@ -96,7 +96,6 @@ export class CategoryFilterComponent implements OnInit {
      } else {
          this.activeParamas[param] = value ;
      }
-
      this.router.navigate(['/catalog'], {
       queryParams: this.activeParamas
      })
