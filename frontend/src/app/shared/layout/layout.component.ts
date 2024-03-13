@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../services/category.service';
 import { CategoryType } from 'src/types/category.type';
+import { CategoryWithTypeType } from 'src/types/category-with-type.type';
 
 @Component({
   selector: 'app-layout',
@@ -10,13 +11,17 @@ export class LayoutComponent implements OnInit {
 
   constructor(private categoryService: CategoryService) { }
 
-  categories: CategoryType[] = [];
+  categories: CategoryWithTypeType[] = [];
 
   ngOnInit(): void {
-    this.categoryService.getCategories()
-       .subscribe( (categories: CategoryType[])=> {
-          this.categories = categories;
+    this.categoryService.getCategoriesWithTypes()
+       .subscribe( (categories: CategoryWithTypeType[])=> {
+          this.categories = categories.map(item=>{  
+            return Object.assign({typesUrl: item.types.map(item=> item.url)}, item);   
+          })
+
           console.log(this.categories);
+                        
         }
     )
   }

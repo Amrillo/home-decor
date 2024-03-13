@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { debounce, debounceTime } from 'rxjs';
 import { CategoryService } from 'src/app/shared/services/category.service';
 import { ProductService } from 'src/app/shared/services/product.service';
 import { ActiveParamsUtil } from 'src/app/shared/utils/active-params.util';
@@ -37,10 +38,12 @@ export class CatalogComponent implements OnInit {
 
     this.categorySerice.getCategoriesWithTypes()
       .subscribe( data=> {
-        console.log(data);
         this.categoriesWithTypes = data ;
-
-        this.activatedRoute.queryParams.subscribe(params=> {
+        this.activatedRoute.queryParams
+        .pipe(
+          debounceTime(500)
+        )
+        .subscribe(params=> {
           this.activeParams = ActiveParamsUtil.processParams(params);
 
           this.appliedFilters = [];
@@ -81,7 +84,7 @@ export class CatalogComponent implements OnInit {
               urlParam: 'diameterTo'
             })
           }
-          console.log(this.activeParams);
+        
           this.productService.getProducts(this.activeParams)
           .subscribe( data=> {
             this.pages=[];

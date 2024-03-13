@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { CategoryWithTypeType } from 'src/types/category-with-type.type';
 import { CategoryType } from 'src/types/category.type';
 
 @Component({
@@ -9,7 +10,7 @@ import { CategoryType } from 'src/types/category.type';
 export class FooterComponent implements OnInit {
 
 
-  @Input() categories: CategoryType[] = [];
+  @Input() categories: CategoryWithTypeType[]= [];
 
   constructor() { }
 
