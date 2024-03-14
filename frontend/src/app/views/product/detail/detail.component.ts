@@ -12,9 +12,10 @@ import { ProductType } from 'src/types/product.type';
 })
 export class DetailComponent implements OnInit {
 
+  count:number  = 1;
   recommendedProducts: ProductType[] = []
-  product!: ProductType ;  
-  serverStaticPath = environment.serverStaticPath ;  
+  product!: ProductType ;
+  serverStaticPath = environment.serverStaticPath ;
 
   customOptions: OwlOptions = {
     loop: true,
@@ -44,20 +45,24 @@ export class DetailComponent implements OnInit {
 
   ngOnInit(): void {
 
-      this.activatedRoute.params.subscribe(params=> {  
+      this.activatedRoute.params.subscribe(params=> {
         this.productService.getProduct(params['url'])
-        .subscribe((data:ProductType)=> {   
-          this.product = data; 
+        .subscribe((data:ProductType)=> {
+          this.product = data;
         })
       })
 
       this.productService.getBestProducts()
-      .subscribe((data:ProductType[])=> {
+        .subscribe((data:ProductType[])=> {
         this.recommendedProducts = data
       })
   }
 
-  updateCount(value:number) {  
-    console.log(value);
+  updateCount(value:number) {
+    this.count = value ;
+  }
+
+  addToCart() {
+    alert('Added to the cart ' + this.count)
   }
 }
