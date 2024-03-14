@@ -55,7 +55,9 @@ export class DetailComponent implements OnInit {
       .subscribe((data:ProductType[])=> {
         this.recommendedProducts = data
       })
+  }
 
-   
+  updateCount(value:number) {  
+    console.log(value);
   }
 }

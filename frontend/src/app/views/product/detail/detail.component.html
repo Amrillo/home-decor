@@ -54,20 +54,20 @@
                         </div>
                     </li>
                 </ul>
-                <div class="detail-info-param">
+                <div class="detail-info-param" *ngIf="product.height">
                     <div class="detail-info-param-name">Высота: </div>
-                    <div class="detail-info-param-data">26 см</div>
+                    <div class="detail-info-param-data">{{product.height}} см</div>
                 </div>
-                <div class="detail-info-param">
+                <div class="detail-info-param" *ngIf="product.diameter" >
                     <div class="detail-info-param-name">Диаметр (горшка): </div>
-                    <div class="detail-info-param-data">10 см</div>
+                    <div class="detail-info-param-data">{{product.diameter}} см</div>
                 </div>
                 <div class="detail-info-params">
                     <div class="detail-info-params-count">
                         <span>Количество</span>
-                        <div></div>
+                         <count-selector  (onCountChange)="updateCount($event)"></count-selector>
                     </div>
-                    <div class="detail-info-params-price">50 BYN</div>
+                    <div class="detail-info-params-price">{{product.price}} BYN</div>
                 </div>
                 <div class="detail-info-actions">
                     <button class="button button-transparent button-icon">
