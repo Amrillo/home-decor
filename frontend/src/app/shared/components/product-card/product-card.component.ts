@@ -13,6 +13,8 @@ export class ProductCardComponent implements OnInit {
   serverStaticPath = environment.serverStaticPath ;  
   count: number = 1 ; 
 
+  @Input() isLight: boolean = false;  
+  
   constructor() { }
 
   ngOnInit(): void {
