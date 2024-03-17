@@ -37,7 +37,7 @@
             <category-filter type="diameter"></category-filter>
           </div>
           <div class="catalog-products">
-              <product-card [product]="product"  *ngFor="let product of products"></product-card>
+              <product-card [countInCart]="product.countInCart"  [product]="product"  *ngFor="let product of products"></product-card>
           </div>
           <div class="catalog-message" *ngIf="showMessage">
                 Товаров не найдено

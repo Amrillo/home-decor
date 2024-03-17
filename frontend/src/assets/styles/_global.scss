@@ -35,8 +35,8 @@ input {
   color: $gray-text-color;
 }
 
-.small-input {  
-  border: 1px solid #6CAC72; 
+.small-input {
+  border: 1px solid #6CAC72;
   border-radius: 5px;
   text-align: center;
   padding: 2px;
@@ -65,18 +65,38 @@ input {
     cursor: not-allowed;
   }
 
-  &.button-transparent {  
+  &.button-transparent {
     background-color: transparent;
     border: 1px solid #6CAC72;
     color: $green-text-color;
-  } 
-  &.button-icon {  
+  }
+  &.button-icon {
     display: flex;
     align-items: center;
     justify-content: center;
 
-    span {  
+    span {
       margin-left: 16px;
+    }
+  }
+
+  &.button-in-cart span {
+      &:first-child {
+        display: block;
+      }
+      &:last-child {
+        display: none;
+      }
+  }
+  &:hover {
+
+    &.button-in-cart span {
+      &:first-child {
+        display: none;
+      }
+      &:last-child {
+        display: block;
+      }
     }
   }
 }
@@ -91,7 +111,7 @@ input {
 
 }
 
-a.button {  
+a.button {
   text-decoration: none;
   display: inline-block;
 }
@@ -118,4 +138,9 @@ a.button {
           }
       }
   }
+}
+
+
+.count-selector {
+  cursor: pointer;
 }

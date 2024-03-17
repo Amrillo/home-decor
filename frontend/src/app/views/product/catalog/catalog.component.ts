@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounce, debounceTime } from 'rxjs';
+import { CartService } from 'src/app/shared/services/cart.service';
 import { CategoryService } from 'src/app/shared/services/category.service';
 import { ProductService } from 'src/app/shared/services/product.service';
 import { ActiveParamsUtil } from 'src/app/shared/utils/active-params.util';
 import { ActiveParamsType } from 'src/types/active-params.type';
 import { AppliedFilterType } from 'src/types/applied-filters.type';
+import { CartType } from 'src/types/cart.type';
 import { CategoryWithTypeType } from 'src/types/category-with-type.type';
 import { ProductType } from 'src/types/product.type';
 
@@ -21,6 +23,8 @@ export class CatalogComponent implements OnInit {
   categoriesWithTypes: CategoryWithTypeType[] = [];
   appliedFilters: AppliedFilterType[]= [];
   sortingOpen = false ;
+  cart: CartType | null = null ;
+  count: number = 1 ;
 
     sortingOptions: {name: string, value:  string}[] =[
       {name: 'От А до Я', value: 'az-asz'},
@@ -32,10 +36,13 @@ export class CatalogComponent implements OnInit {
   showMessage:boolean = false;
 
   constructor(private productService: ProductService , private categorySerice : CategoryService,
-    private activatedRoute: ActivatedRoute, private router: Router) { }
+    private activatedRoute: ActivatedRoute, private router: Router, private cartService: CartService) { }
 
   ngOnInit(): void {
-
+    this.cartService.getCart()
+    .subscribe((data:CartType)=> {
+      this.cart  = data ;
+    })
     this.categorySerice.getCategoriesWithTypes()
       .subscribe( data=> {
         this.categoriesWithTypes = data ;
@@ -84,7 +91,7 @@ export class CatalogComponent implements OnInit {
               urlParam: 'diameterTo'
             })
           }
-        
+
           this.productService.getProducts(this.activeParams)
           .subscribe( data=> {
             this.pages=[];
@@ -95,7 +102,17 @@ export class CatalogComponent implements OnInit {
             if(data.pages === 0) {
               this.showMessage = true;
             }
-            this.products = data.items;
+            if(this.cart && this.cart.items.length > 0) {
+                this.products = data.items.map(product=> {
+                const productInCart = this.cart?.items.find(item=> item.product.id === product.id);
+                if(productInCart) {
+                   product.countInCart = productInCart.quantity
+                }
+                return product;
+              })
+            } else {
+              this.products = data.items;
+             }
           });
        })
     });

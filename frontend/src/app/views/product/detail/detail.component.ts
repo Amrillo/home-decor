@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import { CartService } from 'src/app/shared/services/cart.service';
 import { ProductService } from 'src/app/shared/services/product.service';
 import { environment } from 'src/environments/environment';
+import { CartType } from 'src/types/cart.type';
 import { ProductType } from 'src/types/product.type';
 
 @Component({
@@ -41,13 +43,26 @@ export class DetailComponent implements OnInit {
       }
     }
   }
-  constructor(private productService: ProductService, private activatedRoute : ActivatedRoute) { }
+  constructor(private productService: ProductService, private activatedRoute : ActivatedRoute,
+      private cartService: CartService) { }
 
   ngOnInit(): void {
 
       this.activatedRoute.params.subscribe(params=> {
         this.productService.getProduct(params['url'])
         .subscribe((data:ProductType)=> {
+
+          this.cartService.getCart()
+           .subscribe((cartData: CartType)=> {
+
+            if(cartData) {
+             const productInCart =cartData.items.find(item=> item.product.id === data.id)
+             if(productInCart) {
+              data.countInCart = productInCart.quantity;
+              this.count = data.countInCart;
+              }
+            }
+          })
           this.product = data;
         })
       })
@@ -59,10 +74,27 @@ export class DetailComponent implements OnInit {
   }
 
   updateCount(value:number) {
-    this.count = value ;
+      this.count = value ;
+       if(this.product.countInCart) {
+          this.cartService.updateCart(this.product.id, this.count)
+          .subscribe((data: CartType)=> {
+            this.product.countInCart = this.count;
+          })
+       }
   }
 
   addToCart() {
-    alert('Added to the cart ' + this.count)
+    this.cartService.updateCart(this.product.id, this.count)
+    .subscribe((data: CartType)=> {
+        this.product.countInCart = this.count;
+    })
+  }
+
+  removeFromCart() {
+    this.cartService.updateCart(this.product.id, 0)
+    .subscribe((data: CartType)=> {
+     this.product.countInCart = 0 ;
+       this.count = 1 ;
+    })
   }
 }

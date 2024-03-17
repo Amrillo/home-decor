@@ -16,12 +16,9 @@ export class LayoutComponent implements OnInit {
   ngOnInit(): void {
     this.categoryService.getCategoriesWithTypes()
        .subscribe( (categories: CategoryWithTypeType[])=> {
-          this.categories = categories.map(item=>{  
-            return Object.assign({typesUrl: item.types.map(item=> item.url)}, item);   
+          this.categories = categories.map(item=>{
+            return Object.assign({typesUrl: item.types.map(item=> item.url)}, item);
           })
-
-          console.log(this.categories);
-                        
         }
     )
   }

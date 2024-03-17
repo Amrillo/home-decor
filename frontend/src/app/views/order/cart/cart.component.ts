@@ -13,11 +13,11 @@ import { ProductType } from 'src/types/product.type';
 })
 export class CartComponent implements OnInit {
 
-  extraProducts: ProductType[] = []; 
-  cart: CartType | null = null ;  
+  extraProducts: ProductType[] = [];
+  cart: CartType | null = null ;
   serverStaticPath = environment.serverStaticPath ;
-  totalAmount:number = 0;  
-  totalCount: number = 0; 
+  totalAmount:number = 0;
+  totalCount: number = 0;
   customOptions: OwlOptions = {
     loop: true,
     mouseDrag: false,
@@ -55,20 +55,29 @@ export class CartComponent implements OnInit {
 
     )
     this.cartService.getCart()
-      .subscribe((data:CartType)=> {  
-        this.cart = data ; 
+      .subscribe((data:CartType)=> {
+        this.cart = data ;
         this.calculateTotal();
       })
   }
 
-  calculateTotal() {  
-    this.totalAmount = 0; 
-    this.totalCount = 0; 
-    if(this.cart) {  
-      this.cart?.items.forEach(item=> {  
+  calculateTotal() {
+    this.totalAmount = 0;
+    this.totalCount = 0;
+    if(this.cart) {
+      this.cart?.items.forEach(item=> {
         this.totalAmount += item.quantity * item.product.price;
-        this.totalCount += item.quantity;  
+        this.totalCount += item.quantity;
       })
     }
+  }
+  updateCount(id: string, count: number) {
+      if(this.cart) {
+        this.cartService.updateCart(id, count)
+         .subscribe( (data:CartType)=> {
+            this.cart = data ;
+            this.calculateTotal();
+         })
+      }
   }
 }
