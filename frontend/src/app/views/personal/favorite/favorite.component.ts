@@ -25,10 +25,18 @@ export class FavoriteComponent implements OnInit {
            }       
 
            this.products = data as FavoriteType[];  
-
+           console.log(this.products);
         })
 
   }
 
-
+  removefromFavorites(id:string){  
+      this.favoriteService.removeFavorites(id)
+       .subscribe((data:DefaultResponseType)=> {  
+          if(data.error){  
+            throw new Error(data.message); 
+          }
+          this.products = this.products.filter(item=> item.id !== id);
+       })
+    }
 }

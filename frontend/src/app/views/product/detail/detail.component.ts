@@ -97,4 +97,8 @@ export class DetailComponent implements OnInit {
        this.count = 1 ;
     })
   }
+
+  addToFavorite() {  
+     
+  }
 }

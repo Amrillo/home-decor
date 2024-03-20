@@ -75,5 +75,14 @@ export class AuthService {
     } else {
        localStorage.removeItem(this.userIdKey);
     }
-  }
+  };
+
+  refresh():Observable<DefaultResponseType | LoginResponsType>{  
+       const tokens = this.getTokens(); 
+       if(tokens && tokens.refreshToken) {  
+           return this.http.post<DefaultResponseType | LoginResponsType >(environment.api + 'refresh', 
+           {refreshToken: tokens.refreshToken})
+       }
+       throw throwError(()=> 'Can not use token')
+   };
 }
