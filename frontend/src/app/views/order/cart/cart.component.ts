@@ -4,6 +4,7 @@ import { CartService } from 'src/app/shared/services/cart.service';
 import { ProductService } from 'src/app/shared/services/product.service';
 import { environment } from 'src/environments/environment';
 import { CartType } from 'src/types/cart.type';
+import { DefaultResponseType } from 'src/types/default-response.type';
 import { ProductType } from 'src/types/product.type';
 
 @Component({
@@ -55,8 +56,11 @@ export class CartComponent implements OnInit {
 
     )
     this.cartService.getCart()
-      .subscribe((data:CartType)=> {
-        this.cart = data ;
+      .subscribe((data:CartType | DefaultResponseType)=> {
+        if((data as DefaultResponseType).error !== undefined) {  
+          throw new Error((data as DefaultResponseType).message);
+        }
+        this.cart = data as CartType ;
         this.calculateTotal();
       })
   }
@@ -74,8 +78,11 @@ export class CartComponent implements OnInit {
   updateCount(id: string, count: number) {
       if(this.cart) {
         this.cartService.updateCart(id, count)
-         .subscribe( (data:CartType)=> {
-            this.cart = data ;
+         .subscribe( (data:CartType | DefaultResponseType)=> {
+          if((data as DefaultResponseType).error !== undefined) {
+              throw new Error((data as DefaultResponseType).message);
+          }
+            this.cart = data as CartType ;
             this.calculateTotal();
          })
       }
