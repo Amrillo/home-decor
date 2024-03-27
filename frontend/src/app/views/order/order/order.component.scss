@@ -101,12 +101,12 @@
                 }
               }
 
-              .order-form-textarea {  
-         
-                textarea {  
+              .order-form-textarea {
+
+                textarea {
                   padding: 20px;
                   border:  2px solid #2A592E;
-                  &::placeholder {  
+                  &::placeholder {
                     font-size: 14px;
                     color: #A8ABA7;
                   }
@@ -118,13 +118,13 @@
         .order-details {
             width: 422px;
 
-            .order-details-info {  
+            .order-details-info {
               background-color:  #E7F1E8;
               border-radius: 5px;
               padding: 40px;
               margin-bottom: 14px;
 
-              .order-details-info-title {  
+              .order-details-info-title {
                 font-family: 'Lora';
                 font-weight: 400;
                 font-style: normal;
@@ -133,33 +133,33 @@
                 color: $green-text-color;
               }
 
-              .order-details-info-item {  
+              .order-details-info-item {
                 margin-bottom: 10px;
                 display: flex;
                 align-items: center;
-                color: $gray-text-color;              
+                color: $gray-text-color;
 
-                .order-details-info-item-text {  
+                .order-details-info-item-text {
                   margin-right: 12px;
                 }
 
-                .order-details-info-item-data {  
+                .order-details-info-item-data {
                   font-size: 20px;
                   font-weight: 500;
                   font-style: normal;
                 }
 
-                &:last-child {  
+                &:last-child {
                     margin-bottom: 0;
 
-                  .order-details-info-item-text, 
-                  .order-details-info-item-data {  
+                  .order-details-info-item-text,
+                  .order-details-info-item-data {
                      font-weight: 600;
                   }
                 }
               }
             }
-            .button {  
+            .button {
               width: 100%;
             }
 
@@ -167,3 +167,30 @@
      }
    }
 }
+
+.order-popup {
+   padding: 100px 70px 220px;
+   position: relative;
+   text-align: center;
+   color: $green-text-color;
+   background-position: bottom center;
+   background-repeat: no-repeat;
+   background-image: url(../../../../assets/images/page/popup_bg.png);
+
+   .order-popup-close {
+      position: absolute;
+      right: 30px;
+      top: 30px;
+      cursor: pointer;
+   }
+   .order-popup-title {
+      @include head-lora-32;
+      margin-bottom: 40px;
+   }
+   .order-popup-content div {
+     font-size: 20px;
+     margin-bottom: 5px;
+   }
+}
+
+
