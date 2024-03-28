@@ -42,8 +42,11 @@ export class OrderComponent implements OnInit {
 
   @ViewChild('popup') popup!: TemplateRef<ElementRef>;
   dialogRef: MatDialogRef<any> | null = null ;
+
   constructor(private cartService : CartService, private router : Router,  private _snackBar: MatSnackBar,
-    private fb: FormBuilder, private dialog: MatDialog, private orderService: OrderService) { }
+    private fb: FormBuilder, private dialog: MatDialog, private orderService: OrderService) {
+      this.updateDeliveryValidation();
+    }
 
   ngOnInit(): void {
 
@@ -75,21 +78,67 @@ export class OrderComponent implements OnInit {
 
   changeDeliveryType(type: DeliveryType) {
       this.deliveryType = type ;
+      this.updateDeliveryValidation()
+
+     
    }
 
+   updateDeliveryValidation() {  
+      if(this.deliveryType === DeliveryType.delivery) {  
+        this.orderForm.get('street')?.setValidators(Validators.required);
+        this.orderForm.get('house')?.setValidators(Validators.required);
+      }else {  
+        this.orderForm.get('street')?.removeValidators(Validators.required);
+        this.orderForm.get('house')?.removeValidators(Validators.required);
+        this.orderForm.get('street')?.setValue('');
+        this.orderForm.get('house')?.setValue('');
+        this.orderForm.get('entrance')?.setValue('');
+        this.orderForm.get('apartment')?.setValue('');
+      }
+
+        this.orderForm.get('street')?.updateValueAndValidity();
+        this.orderForm.get('house')?.updateValueAndValidity();
+   }
    createOrder(){
 
-     if(this.orderForm.valid && this.orderForm.value.firstName && this.orderForm.value.lastName && this.orderForm.value.phone,
-      this.orderForm.value.paymentType && this.orderForm.value.email) {
+     if(this.orderForm.valid && this.orderForm.value.firstName &&  this.orderForm.value.phone && this.orderForm.value.lastName 
+      && this.orderForm.value.paymentType && this.orderForm.value.email) {
+
+        // const firstNameValue: string = this.orderForm.value.firstName || ''; // Ensure firstName is a string
+        // const lastNameValue: string = this.orderForm.value.lastName || ''; // Ensure lastName is a string
+        // const phoneValue: string = this.orderForm.value.phone || ''; // Ensure phone is a string
+        // const paymentTypeValue: string = this.orderForm.value.paymentType || ''// Ensure paymentType is a string
+        // const parsedPaymentType: PaymentType = PaymentType[paymentTypeValue as keyof typeof PaymentType];
+        // const emailValue: string = this.orderForm.value.email || ''; // Ensure email is a string
+
 
       const paramsObject : OrderType = {
-        deliveryType: this.deliveryType,
-        firstName: this.orderForm.value.firstName,
-        lastName: this.orderForm.value.lastName,
-        phone: this.orderForm.value.phone,
-        paymentType: this.orderForm.value.paymentType,
-        email: this.orderForm.value.email,
+        deliveryType: this.deliveryType ,
+        firstName: this.orderForm.value.firstName!,
+        lastName: this.orderForm.value.lastName!,
+        phone: this.orderForm.value.phone!,
+        paymentType: this.orderForm.value.paymentType!,
+        email: this.orderForm.value.email!,
       };
+
+      if(this.deliveryType === DeliveryType.delivery) {  
+        if(this.orderForm.value.street) {  
+          paramsObject.street = this.orderForm.value.street
+        }
+        if(this.orderForm.value.apartment) {  
+          paramsObject.apartment = this.orderForm.value.apartment
+        }
+        if(this.orderForm.value.house) {  
+          paramsObject.house = this.orderForm.value.house
+        }
+        if(this.orderForm.value.entrance) {  
+          paramsObject.entrance = this.orderForm.value.entrance
+        } 
+      }
+
+      if(this.orderForm.value.comment) { 
+        paramsObject.comment = this.orderForm.value.comment ; 
+      }
 
       this.orderService.createOrder(paramsObject)
       .subscribe( {
@@ -103,6 +152,7 @@ export class OrderComponent implements OnInit {
                this.router.navigate(['/']);
                }
              );
+             this.cartService.setCount(0);
         },
         error: (errorResponse: HttpErrorResponse)=> {
             if(errorResponse.error && errorResponse.error.message) {
@@ -113,6 +163,9 @@ export class OrderComponent implements OnInit {
         }
        }
       )
+     } else {  
+        this.orderForm.markAllAsTouched();
+        this._snackBar.open('Заполните необходимик поля')
      }
    }
 
